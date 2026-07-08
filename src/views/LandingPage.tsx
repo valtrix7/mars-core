@@ -1,4 +1,5 @@
 import { useState, FormEvent, MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { Shield, Zap, TrendingUp, Server, ArrowRight, X, Eye, EyeOff, Pickaxe, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAppContext } from '../AppContext';
@@ -138,6 +139,28 @@ const stats = [
   { value: '99.99%', label: 'UPTIME' },
 ];
 
+const footerPlatformLinks = [
+  { label: 'Mining Packages', to: '/pricing' },
+  { label: 'Wallet', to: '/docs' },
+  { label: 'Referrals', to: '/docs' },
+  { label: 'Pricing', to: '/pricing' },
+];
+
+const footerResourceLinks = [
+  { label: 'Documentation', to: '/docs' },
+  { label: 'API Status', to: '/status' },
+  { label: 'Support', to: '/support' },
+  { label: 'Blog', to: '/blog' },
+];
+
+const footerLegalLinks = [
+  { label: 'Privacy', to: '/privacy' },
+  { label: 'Terms', to: '/terms' },
+  { label: 'Cookies', to: '/cookies' },
+  { label: 'Risk', to: '/risk-disclosure' },
+  { label: 'AML/KYC', to: '/aml-kyc' },
+];
+
 export default function LandingPage() {
   const { t } = useAppContext();
   const [showAuth, setShowAuth] = useState(false);
@@ -167,8 +190,8 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => openAuth('login')} className="hud-border hud-clip flex items-center gap-2 px-5 py-2.5 hover:bg-[var(--theme-clip-hover)] transition-all text-[var(--theme-text)] text-xs font-display font-bold tracking-widest uppercase">{t('LOGIN')}</button>
-            <button onClick={() => openAuth('signup')} className="hud-border hud-clip flex items-center gap-2 px-5 py-2.5 bg-[var(--theme-accent)] text-[var(--theme-bg)] hover:opacity-80 transition-all text-xs font-display font-bold tracking-widest uppercase">{t('SIGN_UP')}</button>
+            <button onClick={() => openAuth('login')} className="hud-border hud-clip flex items-center gap-2 px-5 py-2.5 hover:bg-[var(--theme-clip-hover)] hover:shadow-[0_0_20px_rgba(var(--theme-accent-rgb),0.3)] hover:scale-105 active:scale-95 transition-all duration-300 text-[var(--theme-text)] text-xs font-display font-bold tracking-widest uppercase">{t('LOGIN')}</button>
+            <button onClick={() => openAuth('signup')} className="hud-border hud-clip flex items-center gap-2 px-5 py-2.5 bg-[var(--theme-accent)] text-[var(--theme-bg)] hover:shadow-[0_0_30px_rgba(var(--theme-accent-rgb),0.5)] hover:scale-105 active:scale-95 transition-all duration-300 text-xs font-display font-bold tracking-widest uppercase">{t('SIGN_UP')}</button>
           </div>
         </div>
       </nav>
@@ -184,10 +207,10 @@ export default function LandingPage() {
             <h1 className="font-display font-bold text-5xl md:text-7xl tracking-[0.1em] text-[var(--theme-accent)] uppercase leading-tight mb-6">{t('FUTURE_OF_MINING')}</h1>
             <p className="text-sm md:text-base font-mono text-[var(--theme-text)] opacity-70 max-w-2xl mx-auto mb-10 leading-relaxed uppercase tracking-wider">{t('HERO_DESCRIPTION')}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={() => openAuth('signup')} className="hud-border hud-clip flex items-center gap-3 px-8 py-4 bg-[var(--theme-accent)] text-[var(--theme-bg)] hover:opacity-80 transition-all text-xs font-display font-bold tracking-widest uppercase">
-                {t('START_MINING')} <ArrowRight className="w-4 h-4" />
+              <button onClick={() => openAuth('signup')} className="hud-border hud-clip flex items-center gap-3 px-8 py-4 bg-[var(--theme-accent)] text-[var(--theme-bg)] hover:shadow-[0_0_40px_rgba(var(--theme-accent-rgb),0.6)] hover:scale-105 active:scale-95 transition-all duration-300 text-xs font-display font-bold tracking-widest uppercase group">
+                {t('START_MINING')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button onClick={() => document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })} className="hud-border hud-clip flex items-center gap-3 px-8 py-4 hover:bg-[var(--theme-clip-hover)] transition-all text-[var(--theme-text)] text-xs font-display font-bold tracking-widest uppercase">
+              <button onClick={() => document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })} className="hud-border hud-clip flex items-center gap-3 px-8 py-4 hover:bg-[var(--theme-clip-hover)] hover:shadow-[0_0_20px_rgba(var(--theme-accent-rgb),0.3)] hover:scale-105 active:scale-95 transition-all duration-300 text-[var(--theme-text)] text-xs font-display font-bold tracking-widest uppercase">
                 {t('VIEW_PLANS')}
               </button>
             </div>
@@ -201,9 +224,9 @@ export default function LandingPage() {
       <section className="py-20 px-6">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="hud-border hud-clip p-6 text-center hover:bg-[var(--theme-clip-hover)] transition-all">
-              <p className="text-2xl md:text-3xl font-mono font-bold text-[var(--theme-accent)] mb-2">{stat.value}</p>
-              <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--theme-text)] opacity-60">{t(stat.label)}</p>
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="hud-border hud-clip p-6 text-center hover:bg-[var(--theme-clip-hover)] hover:shadow-[0_0_30px_rgba(var(--theme-accent-rgb),0.3)] hover:scale-105 hover:border-[var(--theme-accent)] transition-all duration-300 cursor-pointer group">
+              <p className="text-2xl md:text-3xl font-mono font-bold text-[var(--theme-accent)] mb-2 group-hover:scale-110 transition-transform">{stat.value}</p>
+              <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--theme-text)] opacity-60 group-hover:opacity-100 transition-opacity">{t(stat.label)}</p>
             </motion.div>
           ))}
         </div>
@@ -218,13 +241,13 @@ export default function LandingPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {features.map((feat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="hud-border hud-clip p-8 flex items-start gap-5 hover:bg-[var(--theme-clip-hover)] transition-all group">
-                <div className="p-3 border border-[var(--theme-border-solid)] hud-clip group-hover:bg-[var(--theme-accent)] transition-colors flex-shrink-0">
-                  <feat.icon className="w-5 h-5 text-[var(--theme-accent)] group-hover:text-[var(--theme-bg)]" />
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="hud-border hud-clip p-8 flex items-start gap-5 hover:bg-[var(--theme-clip-hover)] hover:shadow-[0_0_40px_rgba(var(--theme-accent-rgb),0.3)] hover:scale-[1.02] hover:border-[var(--theme-accent)] transition-all duration-300 group cursor-pointer">
+                <div className="p-3 border border-[var(--theme-border-solid)] hud-clip group-hover:bg-[var(--theme-accent)] group-hover:shadow-[0_0_20px_rgba(var(--theme-accent-rgb),0.5)] transition-all duration-300 flex-shrink-0">
+                  <feat.icon className="w-5 h-5 text-[var(--theme-accent)] group-hover:text-[var(--theme-bg)] transition-colors" />
                 </div>
                 <div>
-                  <h3 className="font-display font-bold text-sm tracking-[0.15em] text-[var(--theme-accent)] uppercase mb-2">{t(feat.title)}</h3>
-                  <p className="text-[10px] font-mono text-[var(--theme-text)] opacity-60 uppercase tracking-widest leading-relaxed">{t(feat.desc)}</p>
+                  <h3 className="font-display font-bold text-sm tracking-[0.15em] text-[var(--theme-accent)] uppercase mb-2 group-hover:tracking-[0.2em] transition-all">{t(feat.title)}</h3>
+                  <p className="text-[10px] font-mono text-[var(--theme-text)] opacity-60 uppercase tracking-widest leading-relaxed group-hover:opacity-80 transition-opacity">{t(feat.desc)}</p>
                 </div>
               </motion.div>
             ))}
@@ -247,7 +270,7 @@ export default function LandingPage() {
               { name: 'Pro STX', coin: 'STX', price: 299, hashrate: '1000 MH/s', duration: '90 Days' },
             ].map((pkg, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                className={`relative hud-border p-6 flex flex-col transition-all hover:-translate-y-1 ${pkg.popular ? '' : 'hover:bg-[var(--theme-clip-hover)]'}`}
+                className={`relative hud-border p-6 flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(var(--theme-accent-rgb),0.4)] ${pkg.popular ? '' : 'hover:bg-[var(--theme-clip-hover)] hover:border-[var(--theme-accent)]'}`}
                 style={pkg.popular ? { background: 'var(--theme-accent)', color: 'var(--theme-bg)' } : undefined}
               >
                 {pkg.popular && (
@@ -268,7 +291,7 @@ export default function LandingPage() {
                   <div className="flex justify-between"><span className="opacity-60">{t('HASHRATE')}</span><span>{pkg.hashrate}</span></div>
                   <div className="flex justify-between"><span className="opacity-60">{t('DURATION')}</span><span>{pkg.duration}</span></div>
                 </div>
-                <button onClick={() => openAuth('signup')} className={`w-full py-3 text-[10px] font-display font-bold uppercase tracking-widest hud-clip transition-all border ${pkg.popular ? 'bg-[var(--theme-bg)] text-[var(--theme-accent)] border-[var(--theme-bg)] hover:opacity-80' : 'bg-transparent border-[var(--theme-border-solid)] text-[var(--theme-text)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-bg)]'}`}>
+                <button onClick={() => openAuth('signup')} className={`w-full py-3 text-[10px] font-display font-bold uppercase tracking-widest hud-clip transition-all duration-300 border hover:scale-105 active:scale-95 ${pkg.popular ? 'bg-[var(--theme-bg)] text-[var(--theme-accent)] border-[var(--theme-bg)] hover:shadow-[0_0_20px_rgba(var(--theme-bg),0.5)]' : 'bg-transparent border-[var(--theme-border-solid)] text-[var(--theme-text)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-bg)] hover:border-[var(--theme-accent)] hover:shadow-[0_0_20px_rgba(var(--theme-accent-rgb),0.5)]'}`}>
                   {t('GET_STARTED')}
                 </button>
               </motion.div>
@@ -280,14 +303,14 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="hud-border hud-clip p-12 bg-[var(--theme-clip-bg)]">
-            <div className="inline-flex items-center justify-center w-16 h-16 border-2 border-[var(--theme-accent)] hud-clip mb-6">
-              <Lock className="w-7 h-7 text-[var(--theme-accent)]" />
+          <div className="hud-border hud-clip p-12 bg-[var(--theme-clip-bg)] hover:shadow-[0_0_60px_rgba(var(--theme-accent-rgb),0.3)] transition-all duration-500 group">
+            <div className="inline-flex items-center justify-center w-16 h-16 border-2 border-[var(--theme-accent)] hud-clip mb-6 group-hover:bg-[var(--theme-accent)] group-hover:shadow-[0_0_30px_rgba(var(--theme-accent-rgb),0.5)] transition-all duration-300">
+              <Lock className="w-7 h-7 text-[var(--theme-accent)] group-hover:text-[var(--theme-bg)] transition-colors" />
             </div>
-            <h2 className="font-display font-bold text-3xl tracking-[0.15em] text-[var(--theme-accent)] uppercase mb-4">{t('START_TODAY')}</h2>
-            <p className="text-xs font-mono text-[var(--theme-text)] opacity-60 uppercase tracking-widest max-w-md mx-auto mb-8 leading-relaxed">{t('CTA_DESCRIPTION')}</p>
-            <button onClick={() => openAuth('signup')} className="hud-border hud-clip inline-flex items-center gap-3 px-10 py-4 bg-[var(--theme-accent)] text-[var(--theme-bg)] hover:opacity-80 transition-all text-xs font-display font-bold tracking-widest uppercase">
-              {t('CREATE_ACCOUNT')} <ArrowRight className="w-4 h-4" />
+            <h2 className="font-display font-bold text-3xl tracking-[0.15em] text-[var(--theme-accent)] uppercase mb-4 group-hover:tracking-[0.2em] transition-all">{t('START_TODAY')}</h2>
+            <p className="text-xs font-mono text-[var(--theme-text)] opacity-60 uppercase tracking-widest max-w-md mx-auto mb-8 leading-relaxed group-hover:opacity-80 transition-opacity">{t('CTA_DESCRIPTION')}</p>
+            <button onClick={() => openAuth('signup')} className="hud-border hud-clip inline-flex items-center gap-3 px-10 py-4 bg-[var(--theme-accent)] text-[var(--theme-bg)] hover:shadow-[0_0_40px_rgba(var(--theme-accent-rgb),0.6)] hover:scale-105 active:scale-95 transition-all duration-300 text-xs font-display font-bold tracking-widest uppercase group">
+              {t('CREATE_ACCOUNT')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
@@ -299,7 +322,7 @@ export default function LandingPage() {
         
         <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-8">
           {/* Top Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
             {/* Brand */}
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-4">
@@ -323,12 +346,12 @@ export default function LandingPage() {
                 Platform
               </h3>
               <ul className="space-y-4">
-                {['Mining Packages', 'Wallet', 'Referrals', 'Pricing'].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-sm font-mono text-[var(--theme-text)] opacity-50 hover:opacity-100 hover:text-[var(--theme-accent)] transition-all uppercase tracking-widest flex items-center gap-2 group">
-                      <span className="w-1.5 h-1.5 bg-[var(--theme-text)] opacity-0 group-hover:opacity-100 group-hover:bg-[var(--theme-accent)] transition-all rounded-full" />
-                      {item}
-                    </a>
+                {footerPlatformLinks.map((item) => (
+                  <li key={item.label}>
+                    <Link to={item.to} className="text-sm font-mono text-[var(--theme-text)] opacity-50 hover:opacity-100 hover:text-[var(--theme-accent)] hover:pl-2 transition-all duration-300 uppercase tracking-widest flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 bg-[var(--theme-text)] opacity-0 group-hover:opacity-100 group-hover:bg-[var(--theme-accent)] group-hover:shadow-[0_0_10px_rgba(var(--theme-accent-rgb),0.5)] transition-all duration-300 rounded-full" />
+                      {item.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -341,12 +364,30 @@ export default function LandingPage() {
                 Resources
               </h3>
               <ul className="space-y-4">
-                {['Documentation', 'API Status', 'Support', 'Blog'].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-sm font-mono text-[var(--theme-text)] opacity-50 hover:opacity-100 hover:text-[var(--theme-accent)] transition-all uppercase tracking-widest flex items-center gap-2 group">
-                      <span className="w-1.5 h-1.5 bg-[var(--theme-text)] opacity-0 group-hover:opacity-100 group-hover:bg-[var(--theme-accent)] transition-all rounded-full" />
-                      {item}
-                    </a>
+                {footerResourceLinks.map((item) => (
+                  <li key={item.label}>
+                    <Link to={item.to} className="text-sm font-mono text-[var(--theme-text)] opacity-50 hover:opacity-100 hover:text-[var(--theme-accent)] hover:pl-2 transition-all duration-300 uppercase tracking-widest flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 bg-[var(--theme-text)] opacity-0 group-hover:opacity-100 group-hover:bg-[var(--theme-accent)] group-hover:shadow-[0_0_10px_rgba(var(--theme-accent-rgb),0.5)] transition-all duration-300 rounded-full" />
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3 className="font-display font-bold text-sm tracking-[0.2em] text-[var(--theme-accent)] uppercase mb-5 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 bg-[var(--theme-accent)] rounded-full animate-pulse" />
+                Legal
+              </h3>
+              <ul className="space-y-4">
+                {footerLegalLinks.map((item) => (
+                  <li key={item.label}>
+                    <Link to={item.to} className="text-sm font-mono text-[var(--theme-text)] opacity-50 hover:opacity-100 hover:text-[var(--theme-accent)] hover:pl-2 transition-all duration-300 uppercase tracking-widest flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 bg-[var(--theme-text)] opacity-0 group-hover:opacity-100 group-hover:bg-[var(--theme-accent)] group-hover:shadow-[0_0_10px_rgba(var(--theme-accent-rgb),0.5)] transition-all duration-300 rounded-full" />
+                      {item.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
