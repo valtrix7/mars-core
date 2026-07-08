@@ -174,8 +174,8 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-24">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="relative min-h-screen flex items-center justify-center px-6 pt-24 overflow-hidden">
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <div className="inline-flex items-center gap-2 px-4 py-2 hud-border hud-clip mb-8">
               <span className="w-2 h-2 bg-[var(--theme-accent)] animate-pulse rounded-full" />
