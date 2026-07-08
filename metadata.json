@@ -1,0 +1,6 @@
+{
+  "name": "Cloud Mining Platform",
+  "description": "Enterprise-grade cloud mining platform dashboard for STX and LTC.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
