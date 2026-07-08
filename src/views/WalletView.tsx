@@ -6,10 +6,10 @@ export default function WalletView() {
 
   return (
     <div className="h-full flex flex-col justify-center w-full animate-in fade-in duration-500 pb-16">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_clamp(220px,24vw,360px)_minmax(0,1fr)] gap-8 items-start w-full">
         
         {/* Left HUD Panel */}
-        <div className="space-y-6">
+        <div className="space-y-6 lg:col-start-3 lg:row-start-1">
           <div className="hud-border hud-clip p-6">
             <h3 className="font-display font-bold text-[var(--theme-accent)] uppercase tracking-[0.2em] text-lg mb-6">{t('ASSET_LEDGER')}</h3>
             <div className="space-y-4">

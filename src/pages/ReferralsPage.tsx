@@ -41,9 +41,9 @@ export default function ReferralsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_clamp(220px,24vw,360px)_minmax(0,1fr)] gap-6">
         {/* Left Column */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="space-y-4">
           {/* Referral Link */}
           <div className="hud-border hud-clip p-4">
             <div className="flex items-center justify-between mb-3">
@@ -118,7 +118,7 @@ export default function ReferralsPage() {
         </div>
 
         {/* Right Column */}
-        <div className="space-y-4">
+        <div className="space-y-4 lg:col-start-3 lg:row-start-1">
           {/* Tier Card */}
           <div className="hud-border hud-clip p-4">
             <div className="flex items-center justify-between mb-3">

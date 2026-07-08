@@ -8,10 +8,10 @@ export default function AdminView() {
     <div className="h-full flex flex-col justify-center w-full animate-in fade-in duration-500 pb-16">
       
       {/* 3-column Rule of Thirds layout around the center Orb */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_clamp(220px,24vw,360px)_minmax(0,1fr)] gap-8 items-start w-full">
         
         {/* Left HUD Panel */}
-        <div className="space-y-6">
+        <div className="space-y-6 lg:col-start-3 lg:row-start-1">
           <div className="flex items-center justify-between mb-2 px-2">
             <h3 className="font-display font-bold text-[var(--theme-accent)] uppercase tracking-[0.2em] text-lg">{t('SYSTEM_ADMIN')}</h3>
             <div className="flex items-center space-x-2 text-[10px] font-mono font-bold uppercase text-[var(--theme-text)] hud-border px-4 py-2 hud-clip bg-[var(--theme-clip-bg)]">
