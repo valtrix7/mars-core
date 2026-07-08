@@ -1,12 +1,39 @@
-import { useState } from 'react';
+import { useState, FormEvent, MouseEvent } from 'react';
 import { Shield, Zap, TrendingUp, Server, ArrowRight, X, Eye, EyeOff, Pickaxe, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAppContext } from '../AppContext';
 
-function LoginModal({ onClose, onLogin }: { onClose: () => void, onLogin: () => void }) {
-  const { t } = useAppContext();
-  const [isSignUp, setIsSignUp] = useState(false);
+function LoginModal({ initialMode, onClose, onLogin }: { initialMode: 'login' | 'signup', onClose: () => void, onLogin: () => void }) {
+  const { t, login } = useAppContext();
+  const [isSignUp, setIsSignUp] = useState(initialMode === 'signup');
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [ready, setReady] = useState(false);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (isSignUp) {
+      onLogin();
+      return;
+    }
+
+    const success = login(email.trim().toLowerCase(), password.trim());
+    if (success) {
+      onLogin();
+    } else {
+      setError('Invalid email or password');
+    }
+  };
+
+  const handleBackdropClick = (e: MouseEvent) => {
+    if (ready && e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   return (
     <motion.div
@@ -14,7 +41,8 @@ function LoginModal({ onClose, onLogin }: { onClose: () => void, onLogin: () => 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={onClose}
+      onClick={handleBackdropClick}
+      onAnimationComplete={() => setReady(true)}
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <motion.div
@@ -40,26 +68,47 @@ function LoginModal({ onClose, onLogin }: { onClose: () => void, onLogin: () => 
           </p>
         </div>
 
-        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); onLogin(); }}>
+        <form autoComplete="off" className="space-y-4" onSubmit={handleSubmit}>
           {isSignUp && (
             <div>
               <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--theme-text)] opacity-60 mb-2">{t('FULL_NAME')}</label>
-              <input type="text" className="w-full px-4 py-3 bg-[var(--theme-clip-bg)] border border-[var(--theme-border)] text-[var(--theme-text)] text-sm font-mono outline-none focus:border-[var(--theme-accent)] transition-colors hud-clip" placeholder="John Doe" />
+              <input autoComplete="off" type="text" name="fullname" className="w-full px-4 py-3 bg-[var(--theme-clip-bg)] border border-[var(--theme-border)] text-[var(--theme-text)] text-sm font-mono outline-none focus:border-[var(--theme-accent)] transition-colors hud-clip" placeholder="John Doe" />
             </div>
           )}
           <div>
             <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--theme-text)] opacity-60 mb-2">{t('EMAIL')}</label>
-            <input type="email" className="w-full px-4 py-3 bg-[var(--theme-clip-bg)] border border-[var(--theme-border)] text-[var(--theme-text)] text-sm font-mono outline-none focus:border-[var(--theme-accent)] transition-colors hud-clip" placeholder="you@example.com" />
+            <input
+              autoComplete="off"
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 bg-[var(--theme-clip-bg)] border border-[var(--theme-border)] text-[var(--theme-text)] text-sm font-mono outline-none focus:border-[var(--theme-accent)] transition-colors hud-clip"
+              placeholder="you@example.com"
+              required
+            />
           </div>
           <div>
             <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--theme-text)] opacity-60 mb-2">{t('PASSWORD')}</label>
             <div className="relative">
-              <input type={showPassword ? 'text' : 'password'} className="w-full px-4 py-3 bg-[var(--theme-clip-bg)] border border-[var(--theme-border)] text-[var(--theme-text)] text-sm font-mono outline-none focus:border-[var(--theme-accent)] transition-colors hud-clip pr-12" placeholder="••••••••" />
+              <input
+                autoComplete="new-password"
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 bg-[var(--theme-clip-bg)] border border-[var(--theme-border)] text-[var(--theme-text)] text-sm font-mono outline-none focus:border-[var(--theme-accent)] transition-colors hud-clip pr-12"
+                placeholder="••••••••"
+                required
+              />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--theme-text)] opacity-40 hover:opacity-100 transition-opacity">
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
           </div>
+          {error && (
+            <p className="text-red-500 text-xs font-mono uppercase tracking-widest">{error}</p>
+          )}
           <button type="submit" className="w-full py-3 bg-[var(--theme-accent)] text-[var(--theme-bg)] text-[11px] font-display font-bold uppercase tracking-widest hud-clip hover:opacity-80 transition-opacity mt-6">
             {isSignUp ? t('SIGN_UP') : t('LOGIN')}
           </button>
@@ -102,7 +151,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen w-full overflow-y-auto no-scrollbar">
       <AnimatePresence>
-        {showAuth && <LoginModal onClose={() => setShowAuth(false)} onLogin={() => setShowAuth(false)} />}
+        {showAuth && <LoginModal initialMode={authMode} onClose={() => setShowAuth(false)} onLogin={() => setShowAuth(false)} />}
       </AnimatePresence>
 
       {/* Navbar */}
@@ -245,15 +294,110 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-[var(--theme-border)]">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 hud-border hud-clip bg-[var(--theme-accent)]">
-              <Pickaxe className="w-4 h-4" style={{ color: 'var(--theme-bg)' }} />
+      <footer className="relative border-t border-[var(--theme-border)]">
+        <div className="absolute inset-0 bg-[var(--theme-clip-bg)] opacity-30 pointer-events-none" />
+        
+        <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-8">
+          {/* Top Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+            {/* Brand */}
+            <div className="lg:col-span-1">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center w-12 h-12 hud-border hud-clip bg-[var(--theme-accent)]">
+                  <Pickaxe className="w-6 h-6" style={{ color: 'var(--theme-bg)' }} />
+                </div>
+                <div>
+                  <span className="font-display font-bold text-xl tracking-[0.15em] text-[var(--theme-accent)] uppercase">{t('MARS_ORE')}</span>
+                  <p className="text-xs font-mono text-[var(--theme-text)] opacity-50 tracking-widest uppercase">{t('MINING_CORE')}</p>
+                </div>
+              </div>
+              <p className="text-sm font-mono text-[var(--theme-text)] opacity-50 leading-relaxed uppercase tracking-wider max-w-xs">
+                Enterprise-grade mining infrastructure. Secure, fast, and globally distributed.
+              </p>
             </div>
-            <span className="font-display font-bold text-sm tracking-[0.15em] text-[var(--theme-accent)] uppercase">{t('MARS_ORE')}</span>
+
+            {/* Platform */}
+            <div>
+              <h3 className="font-display font-bold text-sm tracking-[0.2em] text-[var(--theme-accent)] uppercase mb-5 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 bg-[var(--theme-accent)] rounded-full animate-pulse" />
+                Platform
+              </h3>
+              <ul className="space-y-4">
+                {['Mining Packages', 'Wallet', 'Referrals', 'Pricing'].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="text-sm font-mono text-[var(--theme-text)] opacity-50 hover:opacity-100 hover:text-[var(--theme-accent)] transition-all uppercase tracking-widest flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 bg-[var(--theme-text)] opacity-0 group-hover:opacity-100 group-hover:bg-[var(--theme-accent)] transition-all rounded-full" />
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3 className="font-display font-bold text-sm tracking-[0.2em] text-[var(--theme-accent)] uppercase mb-5 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 bg-[var(--theme-accent)] rounded-full animate-pulse" />
+                Resources
+              </h3>
+              <ul className="space-y-4">
+                {['Documentation', 'API Status', 'Support', 'Blog'].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="text-sm font-mono text-[var(--theme-text)] opacity-50 hover:opacity-100 hover:text-[var(--theme-accent)] transition-all uppercase tracking-widest flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 bg-[var(--theme-text)] opacity-0 group-hover:opacity-100 group-hover:bg-[var(--theme-accent)] transition-all rounded-full" />
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* System Status */}
+            <div>
+              <h3 className="font-display font-bold text-sm tracking-[0.2em] text-[var(--theme-accent)] uppercase mb-5 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+                System Status
+              </h3>
+              <div className="hud-border hud-clip p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-[var(--theme-text)] opacity-50 uppercase tracking-widest">Network</span>
+                  <span className="text-xs font-mono text-green-400 uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="w-2 h-2 bg-green-400 rounded-full" />
+                    Online
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-[var(--theme-text)] opacity-50 uppercase tracking-widest">Uptime</span>
+                  <span className="text-xs font-mono text-[var(--theme-accent)] uppercase tracking-widest">99.99%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-[var(--theme-text)] opacity-50 uppercase tracking-widest">Hashrate</span>
+                  <span className="text-xs font-mono text-[var(--theme-accent)] uppercase tracking-widest">14.2 PH/s</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-[10px] font-mono text-[var(--theme-text)] opacity-40 uppercase tracking-widest">{t('MINING_CORE')} // 2026</p>
+
+          {/* Divider */}
+          <div className="border-t border-[var(--theme-border)] mb-6" />
+
+          {/* Bottom Section */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-6">
+              <p className="text-xs font-mono text-[var(--theme-text)] opacity-40 uppercase tracking-widest">
+                © 2026 Mars Ore. All rights reserved.
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-xs font-mono text-[var(--theme-text)] opacity-40 uppercase tracking-widest">All Systems Operational</span>
+              </div>
+              <span className="text-[var(--theme-border)]">|</span>
+              <span className="text-xs font-mono text-[var(--theme-text)] opacity-40 uppercase tracking-widest">v2.4.1</span>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

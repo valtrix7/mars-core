@@ -1,6 +1,11 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { translations, Language, Theme } from './translations';
 
+const TEST_CREDENTIALS = {
+  email: 'test@example.com',
+  password: 'password123'
+};
+
 interface AppContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
@@ -8,7 +13,7 @@ interface AppContextType {
   setTheme: (theme: Theme) => void;
   t: (key: string) => string;
   isAuthenticated: boolean;
-  login: () => void;
+  login: (email: string, password: string) => boolean;
   logout: () => void;
 }
 
@@ -24,7 +29,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return translations[language][langKey] || translations['en'][langKey] || key;
   };
 
-  const login = () => setIsAuthenticated(true);
+  const login = (email: string, password: string): boolean => {
+    if (email === TEST_CREDENTIALS.email && password === TEST_CREDENTIALS.password) {
+      setIsAuthenticated(true);
+      return true;
+    }
+    return false;
+  };
+
   const logout = () => setIsAuthenticated(false);
 
   useEffect(() => {
